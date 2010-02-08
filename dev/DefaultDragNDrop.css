@@ -1,0 +1,79 @@
+﻿/*******************************************************************************
+   Copyright 2010 Jon Thompson (www.initiativetracker.com)
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*******************************************************************************/
+
+
+.dndContainer {
+	border:3px solid #ccc;
+	padding: 1em 3em; 
+	cursor: default;
+	radius:8pt;
+	background:#fff;
+	-moz-border-radius:8pt 8pt;
+}
+
+.dojoDndContainerOver {
+	/* cursor:pointer; */
+	border:3px solid #aaa; 
+}
+
+.dojoDndItem { 
+	padding:3px; 
+}
+
+.dojoDndItemOver {
+	background: #ededed;
+	cursor:pointer;
+}
+
+.dojoDndItemSelected {
+	background: #96D5E7; color: #444;
+}
+
+.dojoDndItemAnchor {
+	background: #96D5E7; color: black;
+}
+
+.dojoDndItemOver .dojoDndItemSelected {
+	background: #ededed;
+}
+
+.dojoDndItemOver .dojoDndItemAnchor {
+	background: #ededed;
+}
+
+.dojoDndItemBefore {
+	border-top: 2px solid #369;
+}
+
+.dojoDndItemAfter {
+	border-bottom: 2px solid #369;
+}
+
+.dojoDndAvatar {
+	border:2px solid #ccc;
+	font-size: 75%;
+	-moz-border-radius:8pt 8pt;
+	radius:8pt;
+}
+	
+.dojoDndAvatarHeader {
+	background: #aaa;
+}
+
+.dojoDndAvatarItem {
+	background: #fff;
+	border-bottom:1px solid #666;
+}

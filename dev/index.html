@@ -1,0 +1,342 @@
+<html>
+
+
+
+<!--
+   Copyright 2010 Jon Thompson (www.initiativetracker.com)
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<head>
+    <title>Initiative Tracker</title>
+    
+    <link rel="shortcut icon" href="favicon.ico">
+    
+    
+<!-- 
+    If we are at www.initiativetracker.com, goto initiativetracker.com
+    This is required because WhatWG storage does not work between sub-domains
+    so we never want anyone at www.initiativetracker.com because it doesn't
+    share data with initiativetracker.com
+-->
+<script type="text/javascript">
+if (window.location.hostname == "www.initiativetracker.com")
+{
+    window.location.hostname = "initiativetracker.com";
+}
+</script>
+    
+    
+    
+<!-- Style Sheet Imports -->    
+<style type="text/css">
+  @import "dojo/dijit/themes/nihilo/nihilo.css";
+  @import "DefaultDragNDrop.css";
+  @import "Style.css";
+</style>
+
+<!-- Options -->
+<script type="text/javascript">
+    var _DEBUG_INITIATIVE = false;
+</script>
+
+<!-- Include Dojo -->
+<script type="text/javascript" src="dojo/dojo/dojo.js" djConfig="parseOnLoad:true, isDebug: true"></script>
+
+<!-- Dojo Includes -->
+<script type="text/javascript">
+    dojo.require("dijit.Menu");
+    dojo.require("dijit.Dialog");     
+    dojo.require("dijit.form.Button"); 
+    dojo.require("dijit.form.TextBox")  
+    dojo.require("dijit.form.NumberTextBox");
+    dojo.require("dijit.form.CheckBox");
+    dojo.require("dijit.form.FilteringSelect");
+    dojo.require("dijit.form.ComboBox");
+    dojo.require("dijit.form.MultiSelect");
+    dojo.require("dijit.Editor");  
+    dojo.require("dijit._editor.plugins.FontChoice"); 
+    dojo.require("dijit._editor.plugins.TextColor");
+    dojo.require("dojo.data.ItemFileReadStore");
+    dojo.require("dijit.Toolbar");
+    dojo.require("dijit.layout.StackContainer");
+    dojo.require("dijit.layout.ContentPane");
+    dojo.require("dijit.layout.BorderContainer");
+    dojo.require("dojo.dnd.Container");
+    dojo.require("dojo.dnd.Manager");
+    dojo.require("dojo.dnd.Source");
+    dojo.require("dojox.storage");
+</script>
+
+<!-- Scripts For This Page -->
+<script type="text/javascript" src="TypeCheck.js"></script>
+<script type="text/javascript" src="BrowserSniff.js"></script>
+<script type="text/javascript" src="Util.js"></script>
+<script type="text/javascript" src="Combatant.js"></script>
+<script type="text/javascript" src="CombatantList.js"></script>
+<script type="text/javascript" src="Prompts.js"></script>
+<script type="text/javascript" src="Parsing.js"></script>
+<script type="text/javascript" src="External.js"></script>
+<script type="text/javascript" src="Init.js"></script>
+
+</head>
+
+<body class="nihilo">
+
+<table id="LoadScreen" width="100%" height="120%"><tr><td style="text-align:center"><img src="load.gif"/></td></tr></table>
+
+<table width="100%" height="100%"><tr><td>
+
+<!-- Toolbar -->
+<div dojoType="dijit.Toolbar" style="position: relative; width: 100%; border: 1px #ccc solid; margin-bottom:3px">
+    <div dojoType="dijit.form.Button" id="Toolbar.NewCombat" iconClass="ToolbarIcons ToolbarIconNewCombat" showLabel="false" onClick="CombatantList.Instance.NewCombat()">New</div>
+    <div dojoType="dijit.form.Button" id="Toolbar.OpenCombat" iconClass="ToolbarIcons ToolbarIconOpenCombat" showLabel="false" onClick="PromptOpen.Instance.Show('Open Combat', 'Combat', 'Combats', false, 'Load')">Open</div>
+    <div dojoType="dijit.form.Button" id="Toolbar.SaveCombat" iconClass="ToolbarIcons ToolbarIconSaveCombat" showLabel="false" onClick="PromptSave.Instance.Show('Save Combat', 'Combat', 'Combats')">Save</div>   
+    <span dojoType="dijit.ToolbarSeparator"></span>   
+    <div dojoType="dijit.form.Button" id="Toolbar.AddCombatant" iconClass="ToolbarIcons ToolbarIconAddCombatant" showLabel="false" onClick="PromptAddCombatant.Instance.Show()">Add Combatant</div>
+    <div dojoType="dijit.form.Button" id="Toolbar.DuplicateCombatants" iconClass="ToolbarIcons ToolbarIconDuplicateCombatants" showLabel="false" onClick="if(!CombatantList.Instance.IsSelectionEmpty()) PromptDuplicateCombatants.Instance.Show()">Duplicate Selected Combatant(s)</div>
+    <div dojoType="dijit.form.Button" id="Toolbar.DeleteCombatants" iconClass="ToolbarIcons ToolbarIconDeleteCombatants" showLabel="false" onClick="CombatantList.Instance.RemoveSelectedCombatants()">Remove Selected Combatant(s)</div>   
+    <span dojoType="dijit.ToolbarSeparator"></span>   
+    <div dojoType="dijit.form.Button" id="Toolbar.Next" iconClass="ToolbarIcons ToolbarIconNext" showLabel="false" onClick="CombatantList.Instance.AdvanceInitiative()">Next</div>
+    <span dojoType="dijit.ToolbarSeparator"></span>   
+    <div dojoType="dijit.form.ComboButton" id="Toolbar.Misc" iconClass="ToolbarIcons ToolbarIconMisc" showLabel="false">
+        <span>Misc</span>
+        <div dojoType="dijit.Menu">
+            <div dojoType="dijit.MenuItem" onClick="CombatantList.Instance.EditSelectedCombatant()">Edit Combatant</div>
+            <span dojoType="dijit.MenuSeparator"></span>
+            <div dojoType="dijit.MenuItem" onClick="CombatantList.Instance.AddDefaultPlayers()">Add Default Players</div>
+            <div dojoType="dijit.MenuItem" onClick="PromptOpen.Instance.Show('Open Player List', 'Player List', 'Players', true, 'AddPlayers')">Add Players</div>
+            <div dojoType="dijit.MenuItem" onClick="PromptSave.Instance.Show('Save Player List', 'Player List', 'Players')">Save As Player List</div>
+            <span dojoType="dijit.MenuSeparator"></span>
+            <div dojoType="dijit.MenuItem" onClick="PromptDelete.Instance.Show('Manage Combats', 'Combat', 'Combats')">Managed Saved Combats</div>
+            <div dojoType="dijit.MenuItem" onClick="PromptDelete.Instance.Show('Manage Player Lists', 'Player List', 'Players')">Managed Saved Player Lists</div>
+        </div> 
+    </div>
+    <span class="ElementRight"><a id="A1" href="help.html#DataGone" target="_blank">Lost Data?</a> <a id="Toolbar.Help" href="help.html" target="_blank">Help</a></span>
+</div>
+
+</td></tr><tr width="100%" height="100%"><td>
+
+<!-- Main Content Pane -->
+<div style="position: relative; width: 100%; height: 100%; border: 1px #ccc solid;">
+  <div dojoType="dijit.layout.BorderContainer" design="sidebar" liveSplitters="true" gutters="true" persist="true" id="OuterContainer"> 
+    <div dojoType="dijit.layout.ContentPane" id="LeftPane" region="left" splitter="true" style="width: 200px;">
+        <div id="Combatants"></div>
+    </div>
+    <div dojoType="dijit.layout.StackContainer" id="Notes" region="bottom" splitter="true" style="height: 200px; border: 1px #ccc solid; padding:2px;"></div>
+    <div dojoType="dijit.layout.StackContainer" id="WebPages" region="center"></div>
+  </div>
+</div> 
+
+</td></tr>
+</table>
+
+<!-- Everything below here is hidden -->
+<div style="display: none;">
+
+<!-- Search Engine Display Text -->
+<div>
+Initiative tracker is a simple, straightforward, online initiative tracker for
+D&D or any game which uses a similar initiative system.
+
+Initiative tracker allows you to add creatures with associated webpages which 
+appear in the display pane of the tool.  The tool itself tracks initative and
+hp.  It allows you to save your session and to build lists of players to quickly
+throw into combat.  Enemies automatically have their initiatives rolled while
+for PCs you can either let the tool roll for you or enter the initiatives that
+the players rolled themselves.
+</div>
+
+<div dojoType="dojo.data.ItemFileReadStore" data="SavedCombatStoreData" jsId="SavedCombatStore"></div>
+
+<!-- Add Combatant Prompt -->
+<div dojoType="dijit.Dialog" id="AddCombatantPrompt" title="Add Combatant">
+  <table style="width:400px">
+    <tr>
+      <td class="Right"><label for="URL">URL: </label></td>
+      <td style="width: 100%"><input dojoType="dijit.form.TextBox" type="text" name="URL" id="AddCombatantPromptURL"></td>
+      <td><button dojoType="dijit.form.Button" name="Parse" id="AddCombatantPromptParse">Parse</button></td>
+    </tr>
+    <tr id="AddCombatantPromptParsingRow">
+      <td class="Right"></td>
+      <td colspan=2><img id="AddCombatantPromptParsingImage" src="load.gif"/>&nbsp;<span id="AddCombatantPromptParsingText">Parsing...</label></td>
+    </tr>
+    <tr>
+      <td class="Right"><label for="Name">Name: </label></td>
+      <td colspan=2><input dojoType="dijit.form.TextBox" type="text" name="Name" id="AddCombatantPromptName" style="width: 100%"></td>
+    </tr>
+    <tr>
+      <td class="Right"><label for="HP">HP: </label></td>
+      <td colspan=2><input dojoType="dijit.form.NumberTextBox" type="text" name="HP" id="AddCombatantPromptHP" style="width: 100%"></td>
+    </tr>
+    <tr>
+      <td class="Right"></td>
+      <td colspan=2><input dojoType="dijit.form.CheckBox" type="text" name="IgnoreInitiative" id="AddCombatantPromptIgnoreInitiative"><label for="IgnoreInitiative"> Place at the end of initiative order</label></td>
+    </tr>
+    <tr>
+      <td class="Right"><label for="BaseInitiative">Base Init: </label></td>
+      <td colspan=2><input dojoType="dijit.form.NumberTextBox" type="text" name="BaseInitiative" id="AddCombatantPromptBaseInitiative" style="width: 100%"></td>
+    </tr>
+    <tr>
+      <td colspan=3 align="center">
+        <button dojoType="dijit.form.Button" id="AddCombatantPromptOK" type="submit">OK</button>
+        <button dojoType="dijit.form.Button" id="AddCombatantPromptCancel">Cancel</button>
+      </td>
+    </tr>
+    <tr>
+  </table>
+</div>
+
+<!-- Edit Combatant Prompt -->
+<div dojoType="dijit.Dialog" id="EditCombatantPrompt" title="Edit Combatant">
+  <table>
+    <tr>
+      <td class="Right"><label for="URL">URL: </label></td>
+      <td><input dojoType="dijit.form.TextBox" type="text" name="URL" id="EditCombatantPromptURL"></td>
+    </tr>
+    <tr>
+      <td class="Right"><label for="Name">Name: </label></td>
+      <td><input dojoType="dijit.form.TextBox" type="text" name="Name" id="EditCombatantPromptName"></td>
+    </tr>
+    <tr>
+      <td class="Right"><label for="BaseInitiative">Base Init: </label></td>
+      <td><input dojoType="dijit.form.NumberTextBox" type="text" name="BaseInitiative" id="EditCombatantPromptBaseInitiative"></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center">
+        <button dojoType="dijit.form.Button" id="EditCombatantPromptOK" type="submit">OK</button>
+        <button dojoType="dijit.form.Button" id="EditCombatantPromptCancel">Cancel</button>
+      </td>
+    </tr>
+    <tr>
+  </table>
+</div>
+
+<!-- Duplicate Prompt -->
+<div dojoType="dijit.Dialog" id="DuplicateCombatantsPrompt" title="Add Combatant">
+  <table>
+    <tr>
+      <td class="Right"><label for="Count">How Many Duplicates? </label></td>
+      <td><input dojoType="dijit.form.TextBox" type="text" name="Count" id="DuplicateCombatantsPromptCount"></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center">
+        <button dojoType="dijit.form.Button" id="DuplicateCombatantsPromptOK" type="submit">OK</button>        
+        <button dojoType="dijit.form.Button" id="DuplicateCombatantsPromptCancel">Cancel</button>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<!-- Modify HP Prompt -->
+<div dojoType="dijit.Dialog" id="ModifyHPPrompt" title="Modify HP">
+  <table>
+    <tr>
+      <td class="Right"><label for="Damage">Damage: </label></td>
+      <td><input dojoType="dijit.form.NumberTextBox" type="text" name="Damage" id="ModifyHPPromptDamage"></td>
+    </tr>
+    <tr>
+      <td class="Right"><label for="HP">New HP: </label></td>
+      <td><input dojoType="dijit.form.NumberTextBox" type="text" name="HP" id="ModifyHPPromptHP"></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center">
+        <button dojoType="dijit.form.Button" id="ModifyHPPromptOK" type="submit">OK</button>        
+        <button dojoType="dijit.form.Button" id="ModifyHPPromptCancel">Cancel</button>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<!-- Open Prompt -->
+<div dojoType="dijit.Dialog" id="OpenPrompt" title="Open Combat">
+  <table>
+    <tr>
+      <td class="Right"><label for="CombatName" id="OpenPromptLabel">Combat: </label></td>
+      <td><select dojoType="dijit.form.FilteringSelect" store="SavedCombatStore" searchAttr="Name" id="OpenPromptCombatName" name="CombatName"></td>
+    </tr>
+    <tr id="OpenPromptMakeDefaultRow">
+      <td class="Right"></td>
+      <td><input dojoType="dijit.form.CheckBox" type="text" name="MakeDefault" id="OpenPromptMakeDefault"><label for="MakeDefault"> Make Default</label></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center">
+        <button dojoType="dijit.form.Button" id="OpenPromptOK" type="submit">OK</button>        
+        <button dojoType="dijit.form.Button" id="OpenPromptCancel">Cancel</button>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<!-- Save Prompt -->
+<div dojoType="dijit.Dialog" id="SavePrompt" title="Save Combat">
+  <table>
+    <tr>
+      <td class="Right"><label for="CombatName" id="SavePromptLabel">Combat: </label></td>
+      <td><select dojoType="dijit.form.ComboBox" store="SavedCombatStore" searchAttr="Name" id="SavePromptCombatName" name="CombatName"></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center">
+        <button dojoType="dijit.form.Button" id="SavePromptOK" type="submit">OK</button>        
+        <button dojoType="dijit.form.Button" id="SavePromptCancel">Cancel</button>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<!-- Delete Prompt -->
+<div dojoType="dijit.Dialog" id="DeletePrompt" title="Save Combat">
+  <table>
+    <tr>
+      <td><label for="Combats" id="DeletePromptLabel">Combat: </label></td>
+    </tr>
+    <tr>
+      <td><select dojoType="dijit.form.MultiSelect" searchAttr="Name" id="DeletePromptCombats" name="Combats" style="min-width: 200;"></td>
+    </tr>
+    <tr>
+      <td align="right"><button dojoType="dijit.form.Button" id="DeletePromptDelete">Delete</button></td>
+    </tr>
+    <tr>
+      <td align="center"><button dojoType="dijit.form.Button" id="DeletePromptOK" type="submit">Close</button></td>
+    </tr>
+  </table>
+</div>
+
+<!-- Error Messages -->
+<div id="ParseError">
+    Parsing Failed - There are three possible explanations:
+    <ol>
+        <li>The page does not exist</li>
+        <li>The page does not contain valid stats</li>
+        <li>The page requires your to login to access it.  Due to browser security
+            restrictions such pages cannot be parsed normally.  Firefox users
+            can make use of the 
+            <a href="https://addons.mozilla.org/en-US/firefox/addon/10968" target="_blank">
+            Initiative Tracker Helper Extension</a>.  This extension allows you
+            to add any page to Initiative Tracker.  Otherwise you will need to
+            type in the stats by hand for such pages.  Pages protected by login
+            <strong>can</strong> be displayed in Initiative Tracker, but there
+            are issues with cookies.  See the 
+            <a href="help.html#cookies" target="_blank">help for more details</a>.
+        </li>        
+    </ol>
+</div>
+
+
+<!-- Marker for the extension to look for -->
+<div id="971D003C-5148-4e9d-9032-CDD36FA35D53" onExternalAddCombatant="alert('Yeah')"></div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<html>
+
+<!--
+   Copyright 2010 Jon Thompson (www.initiativetracker.com)
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<head>
+    <title>Initiative Tracker - Contact</title>
+    
+    <link rel="shortcut icon" href="favicon.ico">
+    
+    <!-- Style Sheet Imports -->    
+    <style type="text/css">
+      @import "HelpStyle.css";
+    </style>
+    
+</head>
+
+<body class="nihilo">
+
+<h1>Contact</h1>
+
+<form method="POST" action="contact.php">
+
+<p>
+Your Email Address:<br>
+<input type="text" name="FromEmail" size="80">
+</p>
+
+<p>
+Reason:<br>
+<select name="Reason">
+    <option value="General Feedback">General Feedback</option>
+    <option value="How Do I">How Do I?</option>
+    <option value="Bug Report">Bug Report</option>
+    <option value="Feature Request">Feature Request</option>
+</select>
+</p>
+
+<p>
+Message:<br>
+<textarea name="Message" cols="80" rows="10"></textarea>
+</p>
+
+<p><input type="submit" name="submit" value="Submit"></p>
+</form>
+
+</form>
+
+<a href="help.html">Back to Help</a>
+
+</body>

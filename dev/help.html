@@ -1,0 +1,144 @@
+<html>
+
+<!--
+   Copyright 2010 Jon Thompson (www.initiativetracker.com)
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<head>
+    <title>Initiative Tracker - Help</title>
+    
+    <link rel="shortcut icon" href="favicon.ico">
+    
+    <!-- Style Sheet Imports -->    
+    <style type="text/css">
+      @import "HelpStyle.css";
+    </style>
+    
+</head>
+
+<body class="nihilo">
+
+<h1>Initiative Tracker Help</h1>
+
+<h2 id="contact">Contact</h1>
+You can contact the author by using the <a href="contact.html">contact form</a>.
+
+<h2 id="extension">Firefox Extension</h2>
+There is a firefox extension called "Initiative Tracker Helper".  It allows you
+to right click on any page and automatically add it to Initiative Tracker, and
+have it parsed.  The extension is available here: 
+<a href="https://addons.mozilla.org/en-US/firefox/addon/10968" target="_blank">
+https://addons.mozilla.org/en-US/firefox/addon/10968</a>
+
+<h2 id="cookies">Viewing Pages That Require A Login</h2>
+<p>
+    Depending on your browser settings you may not be able to view pages in
+    Initiative Tracker that require a login (such as the D&D compendium).  
+    This is related to a browser security issue called "3rd party cookies".  
+    You are required to log on to the secure page (since Initiative Tracker
+    just shows pages that you have a valid right to be at) but your browser
+    prevents you because its worried about the remote page creating a 3rd party
+    coookie.  If you are experiencing this issue, then your browser is configured
+    to reject 3rd party cookies.  Which is generally a good thing.  Fortunately
+    most browsers have a mechanism to allow 3rd party cookies from specific 
+    sites.
+</p>
+    <img src="help/cookies/Error.jpg"/>
+<p>
+    The easiest way to get around this issue is to just enable 3rd party cookies.
+    However, that is not reccomended, because it would allow data mining 
+    advertising companies to potentially track your progress across the web.  
+    Instead you should just allow cookies from specific sites you intend to use
+    with Initiative Tracker.
+</p>
+<h3>Firefox</h3>
+<ol>
+    <li>From the menu choose: Tools->Options</li>
+    <li>Select the "Privacy" Tab
+        <br/><img src="help/cookies/FF1.jpg" /></li>
+    <li>Click "Exceptions..."</li>
+    <li>Type the domain name you wish to use with Initiative Tracker (ex: "wizards.com")
+        <br/><img src="help/cookies/FF2.jpg" /></li>
+    <li>Click "Enable"</li>
+    <li>Repeat steps 4 and 5 for each domain you wish to use</li>
+    <li>Click "Close"
+        <br/><img src="help/cookies/FF3.jpg" /></li>
+    <li>Click "OK"</li>
+</ol>
+<h3>Internet Explorer</h3>
+<ol>
+    <li>From the menu choose: Tools->Internet Options
+        <br/><img src="help/cookies/IE1.jpg" /></li>
+    <li>Select the "Privacy" Tab
+        <br/><img src="help/cookies/IE2.jpg" /></li>
+    <li>Click "Sites"</li>
+    <li>Type the domain name you wish to use with Initiative Tracker (ex: "wizards.com")
+        <br/><img src="help/cookies/IE3.jpg" /></li>
+    <li>Click "Allow"</li>
+    <li>Repeat steps 4 and 5 for each domain you wish to use</li>
+    <li>Click "OK"
+        <br/><img src="help/cookies/IE4.jpg" /></li>
+    <li>Click "OK"</li>
+    
+</ol>
+
+<h2 id="DataGone">My Data Is Gone!</h2>
+<p>
+<em>"I just came back to the site and my data is gone!"</em>
+</p>
+<p>
+On June 29, 2009 the way the application stores data changed slightly.  A small
+subset of users will not be able to access their data with the new version.  The
+new version <strong>cannot</strong> access your data because of security 
+restrictions.  You can however continue to use the old version which 
+<strong>can</strong> read your data.  You can find it at:
+</p>
+<p>
+<a href="http://www.initiativetracker.com/recovery">http://www.initiativetracker.com/recovery</a>
+</p>
+<p>
+At some point in the future I plan to implement an utility to import/export 
+data, at which point you should be able to export your data from the recovery
+page and import it into the main page.
+</p>
+<p>
+If the link provided does not help then this is a serious bug please
+<a href="contact.html">Report It</a>.
+</p>
+
+<h2 id="Navigate Away">Pages That Navigate Away From Initiative Tracker</h2>
+<p>
+<em>"I added a page and now whenever I start InitiativeTracker, once its 
+finished loading it switches to that page."</em>
+</p>
+<p>
+This can happen if a page has automatic code to break itself out of other sites 
+that contain it.  Sites sometimes do this to prevent other sites from including
+their content and passing it off as their own.  If you add such a site, as soon
+as Initiative Tracker loads it, it will force your browser to its own site.
+</p>
+<p>
+In the future I would like to detect this behaviour and prevent it somehow, but
+in the meantime there is something you can do if this happens to you.
+</p>
+<ol>
+    <li>Open up the Initative Tracker page and let it take you to the other page.</li>
+    <li>Click back</li>
+    <li>As soon InitiativeTracker is loaded and you see the loading graphic appear click stop.</li>
+    <li>Click the New Combat button or remove the offending combatant.</li>
+</ol>
+
+</body>
+</html>

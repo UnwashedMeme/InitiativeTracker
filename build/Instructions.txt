@@ -1,0 +1,7 @@
+Changes to make to index.html:
+
+isDebug: false
+
+<script type="text/javascript" src="IT.js"></script>
+
+
